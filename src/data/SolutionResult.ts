@@ -1,0 +1,3 @@
+interface SolutionResult {
+    solutions: [Solution];
+}

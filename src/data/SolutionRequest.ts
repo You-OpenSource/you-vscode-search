@@ -1,0 +1,3 @@
+interface SolutionRequest {
+    codeLine: String;
+}
