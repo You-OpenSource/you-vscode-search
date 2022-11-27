@@ -13,32 +13,20 @@
     "*"
   ],
   "main": "./dist/extension.js",
-  "capabilities" : {
-    "codeLensProvider" : {
-        "resolveProvider": "true"
+  "capabilities": {
+    "codeLensProvider": {
+      "resolveProvider": "true"
     }
   },
   "contributes": {
     "commands": [
       {
-        "command": "you-com-search.helloWorld",
+        "command": "you-com-search.open",
         "title": "Open You.com code assistant"
       },
       {
         "command": "you-com-search.apply",
         "title": "Apply Code Completion"
-      }
-    ],
-    "customEditors": [
-      {
-        "viewType": "youEdit.youcomsuggestions",
-        "displayName": "You.com suggesttions",
-        "selector": [
-          {
-            "filenamePattern": "*.youcomsuggestions"
-          }
-        ],
-        "priority": "default"
       }
     ]
   },

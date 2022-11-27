@@ -32,7 +32,7 @@ export default {
                         }
                     ]
                 }
-            })
+            });
             observer.complete();
             // apiService.getApiResult(request.codeLine, 15, "codesnippets", 1).then((response) => {
             //     observer.next(response.data);
