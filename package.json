@@ -10,14 +10,23 @@
     "Other"
   ],
   "activationEvents": [
-    "onCommand:you-com-search.helloWorld"
+    "*"
   ],
   "main": "./dist/extension.js",
+  "capabilities" : {
+    "codeLensProvider" : {
+        "resolveProvider": "true"
+    }
+  },
   "contributes": {
     "commands": [
       {
         "command": "you-com-search.helloWorld",
-        "title": "Hello World"
+        "title": "Open You.com code assistant"
+      },
+      {
+        "command": "you-com-search.apply",
+        "title": "Apply Code Completion"
       }
     ],
     "customEditors": [
