@@ -17,16 +17,18 @@ export interface SearchResponse {
 
 
 export class ApiService extends BaseService {
-    @GET("generic")
+    @Headers({
+        "Content-Type": "application/json",
+        "Accept": "application/json",
+        "User-Agent": "youide"
+      })
+    @GET("generic?version=1&fields=snippet_title%2Csnippet_code%2Csource%2Clanguage%2Curl%2Code_snippets&size=1")
     async getApiResult(
         @Query("query") queryId: String,
         @Query("size") sizeId: number,
         @Query("source") sourceId: String,
-        @Query("page") pageId: number,
-        @Query("service") service: String = "codesnippets",
-        @Query("version") version: String = "1",
-        @Query("fields") fields: String = "snippet_code%2Curl"
+        @Query("page") pageId: number
     ): Promise<Response<SearchResponse>> {
-        return <Response<SearchResponse>> {};
+        return <Response<SearchResponse>>{};
     }
 }

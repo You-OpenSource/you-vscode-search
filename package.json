@@ -2,6 +2,8 @@
   "name": "you-com-search",
   "displayName": "you.com search",
   "description": "You.com search panel with code suggestions",
+  "segmentWriteKey": "aCWEyoDsQDjq9yNRhPKHh3fnu3aBD9Tx",
+  "segmentWriteKeyDebug": "aCWEyoDsQDjq9yNRhPKHh3fnu3aBD9Tx",
   "version": "0.0.1",
   "engines": {
     "vscode": "^1.73.0"
@@ -28,7 +30,21 @@
         "command": "you-com-search.apply",
         "title": "Apply Code Completion"
       }
-    ]
+    ],
+    "configuration": {
+      "properties": {
+        "redhat.telemetry.enabled": {
+          "type": "boolean",
+          "default": true,
+          "markdownDescription": "Enable usage data and errors to be sent to Red Hat servers. TODO",
+          "tags": [
+            "telemetry",
+            "usesOnlineServices"
+          ],
+          "scope": "window"
+        }
+      }
+    }
   },
   "scripts": {
     "vscode:prepublish": "npm run package",
@@ -42,6 +58,7 @@
     "test": "node ./out/test/runTest.js"
   },
   "dependencies": {
+    "@dmi3coder/vscode-redhat-telemetry": "github:dmi3coder/vscode-redhat-telemetry",
     "rxjs": "^7.5.7",
     "ts-retrofit": "^1.18.0"
   },
