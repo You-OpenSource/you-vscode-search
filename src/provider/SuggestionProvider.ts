@@ -1,8 +1,8 @@
 import * as vscode from "vscode";
-import {debounce, interval, Subject} from "rxjs";
+import { debounce, interval, Subject } from "rxjs";
 import RemoteYouRepository from "../data/repository/RemoteYouRepository";
-import {SuggestionRequest} from "../data/SuggestionRequest";
-import {Result} from "../data/repository/ApiService";
+import { SuggestionRequest } from "../data/SuggestionRequest";
+import { Result } from "../data/repository/ApiService";
 import SuggestionDocumentProvider from "./SuggestionDocumentProvider";
 
 
@@ -24,29 +24,35 @@ export default class SuggestionProvider {
             if (evt.kind !== 2) {
                 return;
             }
-            const selection = evt.textEditor.selection;
+            let selection = evt.textEditor.selection;
+
             if (evt.textEditor.document.uri.toString() === 'you-com-search:suggestions') {
                 return;
             }
             const language = evt.textEditor.document.languageId;
-            let text = evt.textEditor.document.getText(selection).trim();
+
+            let text;
+            if (selection.start.character == selection.end.character) {
+                text = evt.textEditor.document.lineAt(evt.textEditor.selection.start.line).text.trim();
+            } else {
+                text = evt.textEditor.document.getText(selection).trim();
+            }
+
             let cleanedText = text;
-            if(text[0].startsWith('#')) {
+            if (text[0].startsWith('#')) {
                 cleanedText = text.substring(1);
-            } else if( text.startsWith('//')) {
+            } else if (text.startsWith('//')) {
                 cleanedText = text.substring(2);
             }
             const searchText = `${language} ${cleanedText}`;
-            console.log(searchText)
-            // setText(text);
-            suggestionProvider.selectionSubject.next({editor: evt.textEditor, selection: searchText});
+            suggestionProvider.selectionSubject.next({ editor: evt.textEditor, selection: searchText });
         });
         suggestionProvider.selectionSubject.pipe(debounce(() => interval(1000))).subscribe((selection) => {
-            RemoteYouRepository.getCodeSuggestions({codeLine: selection.selection}).subscribe((response) => {
+            RemoteYouRepository.getCodeSuggestions({ codeLine: selection.selection }).subscribe((response) => {
                 suggestionProvider.suggestionEditor = selection.editor;
                 suggestionProvider.solutions = response.searchResults.results;
                 setText(response.searchResults.results.map((result, index) => {
-                    return {snippet: result.snippet_code, index};
+                    return { snippet: result.snippet_code, index };
                 }).reduce((acc, curr) => {
                     return acc + (acc.length === 0 ? '' : '\n') + `==========\n` + curr.snippet;
                 }, ''));
