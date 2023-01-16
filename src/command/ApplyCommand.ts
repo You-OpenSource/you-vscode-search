@@ -6,23 +6,26 @@ import { getTelemetry } from "../telemetry";
 export default class ApplyCommand {
     private getActiveEditor: () => (vscode.TextEditor | undefined);
     private getSolutions: () => Result[];
+    private getSelection: () => vscode.Selection | undefined;
 
 
     static activate(context: vscode.ExtensionContext, getActiveEditor: () => vscode.TextEditor | undefined,
-        getSolutions: () => Result[]) {
+        getSolutions: () => Result[], getSelection: () => vscode.Selection | undefined) {
 
         const command = 'you-com-search.apply';
-        let applyCommand = new ApplyCommand(getActiveEditor, getSolutions);
+        let applyCommand = new ApplyCommand(getActiveEditor, getSolutions, getSelection);
         context.subscriptions.push(vscode.commands.registerCommand(command, applyCommand.handle));
     }
 
 
     constructor(
         getActiveEditor: () => vscode.TextEditor | undefined,
-        getSolutions: () => Result[]
+        getSolutions: () => Result[],
+        getSelection: () => vscode.Selection | undefined,
     ) {
         this.getActiveEditor = getActiveEditor;
         this.getSolutions = getSolutions;
+        this.getSelection = getSelection;
     }
 
     handle = (position: number = 0) => {
@@ -39,8 +42,13 @@ export default class ApplyCommand {
             });
 
             activeEditor.edit((editBuilder: vscode.TextEditorEdit) => {
-                const selection = activeEditor!.selection;
-                editBuilder.replace(selection, selectedSolution);
+                let selection = this.getSelection();
+                if( selection && activeEditor) {
+                    let selectedText = activeEditor.document.getText(selection);
+                    let indentation  = selectedText.length - selectedText.trimStart().length;
+                    let indendetSolution = selectedSolution.split('\n').map(line => (' '.repeat(indentation)) + line).join('\n')
+                    editBuilder.replace(selection, indendetSolution);
+                }
             });
         }
     };

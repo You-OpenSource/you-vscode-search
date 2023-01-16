@@ -23,7 +23,7 @@ To start, select a piece of code and see suggestions.
         suggestionDocumentContent = text;
     });
     OpenCommand.activate(context);
-    ApplyCommand.activate(context, suggestionProvider.getSuggestionEditor, suggestionProvider.getSolutions);
+    ApplyCommand.activate(context, suggestionProvider.getSuggestionEditor, suggestionProvider.getSolutions, suggestionProvider.getSelection);
 
 }
 

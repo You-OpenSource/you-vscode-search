@@ -11,10 +11,12 @@ export default class SuggestionProvider {
     test = '';
     solutions: Result[] = [];
     suggestionEditor: vscode.TextEditor | undefined;
+    selection: vscode.Selection | undefined;
 
 
     getSuggestionEditor = () => this.suggestionEditor;
     getSolutions = () => this.solutions;
+    getSelection = () => this.selection;
 
 
     static activate(context: vscode.ExtensionContext, myProvider: SuggestionDocumentProvider, setText: (text: string) => void): SuggestionProvider {
@@ -34,7 +36,9 @@ export default class SuggestionProvider {
 
             let text;
             if (selection.start.character == selection.end.character) {
-                text = evt.textEditor.document.lineAt(evt.textEditor.selection.start.line).text.trim();
+                let line = evt.textEditor.document.lineAt(evt.textEditor.selection.start.line);
+                selection = new vscode.Selection(line.range.start, line.range.end);
+                text = line.text.trim();
             } else {
                 text = evt.textEditor.document.getText(selection).trim();
             }
@@ -46,11 +50,12 @@ export default class SuggestionProvider {
                 cleanedText = text.substring(2);
             }
             const searchText = `${language} ${cleanedText}`;
-            suggestionProvider.selectionSubject.next({ editor: evt.textEditor, selection: searchText });
+            suggestionProvider.selectionSubject.next({ editor: evt.textEditor, selectionText: searchText, selection });
         });
-        suggestionProvider.selectionSubject.pipe(debounce(() => interval(1000))).subscribe((selection) => {
-            RemoteYouRepository.getCodeSuggestions({ codeLine: selection.selection }).subscribe((response) => {
+        suggestionProvider.selectionSubject.pipe(debounce(() => interval(2000))).subscribe((selection) => {
+            RemoteYouRepository.getCodeSuggestions({ codeLine: selection.selectionText }).subscribe((response) => {
                 suggestionProvider.suggestionEditor = selection.editor;
+                suggestionProvider.selection = selection.selection
                 suggestionProvider.solutions = response.searchResults.results;
                 setText(response.searchResults.results.map((result, index) => {
                     return { snippet: result.snippet_code, index };
