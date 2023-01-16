@@ -36,7 +36,7 @@
         "redhat.telemetry.enabled": {
           "type": "boolean",
           "default": true,
-          "markdownDescription": "Enable usage data and errors to be sent to Red Hat servers. TODO",
+          "markdownDescription": "Enable usage data and errors to be sent to You.com",
           "tags": [
             "telemetry",
             "usesOnlineServices"

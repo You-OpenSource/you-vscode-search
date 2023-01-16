@@ -21,9 +21,10 @@ export default class SuggestionProvider {
         let suggestionProvider = new SuggestionProvider();
         const uri = vscode.Uri.parse('you-com-search:' + 'suggestions');
         vscode.window.onDidChangeTextEditorSelection((evt: vscode.TextEditorSelectionChangeEvent) => {
-            if (evt.kind !== 2) {
-                return;
-            }
+            // Disables suggestion on typing
+            // if (evt.kind !== 2) {
+            //     return;
+            // }
             let selection = evt.textEditor.selection;
 
             if (evt.textEditor.document.uri.toString() === 'you-com-search:suggestions') {
