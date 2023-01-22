@@ -30,7 +30,7 @@ export default class ApplyCommand {
 
     handle = (position: number = 0) => {
         let activeEditor = this.getActiveEditor();
-        const selectedSolution = this.getSolutions()[position].snippet_code
+        const selectedSolution = this.getSolutions()[position].snippet_code;
         if (activeEditor) {
             getTelemetry().send({
                 name: "vscode_user_click",
