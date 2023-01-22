@@ -4,8 +4,9 @@
   "description": "You.com search panel with code suggestions",
   "segmentWriteKey": "aCWEyoDsQDjq9yNRhPKHh3fnu3aBD9Tx",
   "segmentWriteKeyDebug": "aCWEyoDsQDjq9yNRhPKHh3fnu3aBD9Tx",
-  "version": "0.0.1",
+  "version": "0.0.2",
   "publisher": "youdotcom",
+  "icon": "media/icon.png",
   "repository": "https://github.com/You-OpenSource/you-vscode-search",
   "engines": {
     "vscode": "^1.73.0"
